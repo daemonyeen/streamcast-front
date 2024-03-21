@@ -16,7 +16,9 @@ export const CastOverlay = component$(() => {
 
   useVisibleTask$(() => {
     setInterval(() => {
-      likes.value = lastMessage.value?.likes || 0;
+      likes.value =
+        castMessages.find(message => message.id === lastMessage.value?.id)
+          ?.likes || 0;
     }, 100);
 
     setInterval(() => {
