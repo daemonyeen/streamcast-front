@@ -4,6 +4,7 @@ export type MessageDto = Readonly<{
   message: string;
   photoUrl?: string;
   likes: number;
+  liked: boolean;
   created: string;
 }>;
 

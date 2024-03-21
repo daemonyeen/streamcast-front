@@ -44,12 +44,25 @@ export const Feed = component$(() => {
   useVisibleTask$(() => {
     store.streamClient = noSerialize(new StreamClient());
     store.streamClient!.connect(roomId, newMessage => {
+      newMessage = {
+        ...newMessage,
+        liked: false,
+      };
+
       const existing = store.messages.find(
         message => message.id === newMessage.id,
       );
 
       if (existing) {
         store.messages = store.messages.map(message => {
+          if (message.id === newMessage.id) {
+            return newMessage;
+          }
+
+          return message;
+        });
+
+        store.castMessages = store.castMessages.map(message => {
           if (message.id === newMessage.id) {
             return newMessage;
           }

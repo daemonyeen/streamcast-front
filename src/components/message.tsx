@@ -1,4 +1,4 @@
-import { $, component$ } from "@builder.io/qwik";
+import { $, component$, useSignal } from "@builder.io/qwik";
 import { formatDistance, subHours } from "date-fns";
 import { ru } from "date-fns/locale";
 import type { MessageDto } from "~/stream/message";
@@ -8,6 +8,7 @@ export const Message = component$(({ message }: { message: MessageDto }) => {
   const distance = formatDistance(message.created, subHours(new Date(), 4), {
     locale: ru,
   });
+  const liked = useSignal(message.liked);
 
   const like = $(async () => {
     await fetch(`http://94.131.14.228:8081/messages/${message.id}/like`, {
@@ -17,6 +18,8 @@ export const Message = component$(({ message }: { message: MessageDto }) => {
         "Content-Type": "application/json",
       }),
     }).then();
+
+    liked.value = true;
   });
 
   return (
@@ -27,13 +30,24 @@ export const Message = component$(({ message }: { message: MessageDto }) => {
       </div>
       <div class="text-sm">{message.message}</div>
       <div class="mt-2 flex text-sm">
-        <button
-          class="flex items-center space-x-2 rounded-full bg-violet-100 px-3 py-1.5 outline-0"
-          onClick$={like}
-        >
-          <LikeSvg class="text-rose-600" />
-          <span class="font-medium text-violet-900">{message.likes}</span>
-        </button>
+        {!liked.value && (
+          <button
+            class="flex items-center space-x-2 rounded-full bg-violet-100 px-3 py-1.5 outline-0"
+            onClick$={like}
+          >
+            <LikeSvg class="text-rose-600" />
+            <span class="font-medium text-violet-900">{message.likes}</span>
+          </button>
+        )}
+        {liked.value && (
+          <button
+            class="flex items-center space-x-2 rounded-full bg-rose-500 px-3 py-1.5 outline-0"
+            onClick$={like}
+          >
+            <LikeSvg class="text-white" />
+            <span class="font-medium text-white">{message.likes}</span>
+          </button>
+        )}
       </div>
     </div>
   );
