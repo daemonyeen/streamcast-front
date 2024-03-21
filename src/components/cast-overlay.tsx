@@ -47,7 +47,9 @@ export const CastOverlay = component$(() => {
           </div>
           <div class="flex items-center space-x-6">
             <LikeSvg class="h-[50px] w-[50px] text-rose-400" />
-            <span class="text-[4vh] font-bold text-indigo-300">{likes}</span>
+            <span class="text-[4vh] font-bold text-indigo-300">
+              {likes.value}
+            </span>
           </div>
         </div>
         <div class="mt-6 line-clamp-5 text-[6vh] font-bold text-white">
