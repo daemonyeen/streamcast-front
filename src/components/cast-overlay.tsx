@@ -12,8 +12,13 @@ import LikeSvg from "~/icons/like.svg?jsx";
 export const CastOverlay = component$(() => {
   const { castMessages } = useContext<FeedState>(FeedContext);
   const lastMessage = useSignal<MessageDto | null>(castMessages[0]);
+  const likes = useSignal(0);
 
   useVisibleTask$(() => {
+    setInterval(() => {
+      likes.value = lastMessage.value?.likes || 0;
+    }, 100);
+
     setInterval(() => {
       const index = castMessages.findIndex(
         message => message.id === lastMessage.value?.id,
@@ -26,6 +31,7 @@ export const CastOverlay = component$(() => {
 
       if (actualLastMessage !== lastMessage.value) {
         lastMessage.value = actualLastMessage;
+        likes.value = lastMessage.value?.likes || 0;
       }
     }, 10_000);
   });
@@ -39,9 +45,7 @@ export const CastOverlay = component$(() => {
           </div>
           <div class="flex items-center space-x-6">
             <LikeSvg class="h-[50px] w-[50px] text-rose-400" />
-            <span class="text-[4vh] font-bold text-indigo-300">
-              {lastMessage.value?.likes}
-            </span>
+            <span class="text-[4vh] font-bold text-indigo-300">{likes}</span>
           </div>
         </div>
         <div class="mt-6 line-clamp-5 text-[6vh] font-bold text-white">

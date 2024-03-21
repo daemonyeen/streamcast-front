@@ -40,10 +40,7 @@ export const Message = component$(({ message }: { message: MessageDto }) => {
           </button>
         )}
         {liked.value && (
-          <button
-            class="flex items-center space-x-2 rounded-full bg-rose-500 px-3 py-1.5 outline-0"
-            onClick$={like}
-          >
+          <button class="flex items-center space-x-2 rounded-full bg-rose-500 px-3 py-1.5 outline-0">
             <LikeSvg class="text-white" />
             <span class="font-medium text-white">{message.likes}</span>
           </button>
