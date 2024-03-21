@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { $, component$ } from "@builder.io/qwik";
 import { formatDistance, subHours } from "date-fns";
 import { ru } from "date-fns/locale";
 import type { MessageDto } from "~/stream/message";
@@ -9,6 +9,16 @@ export const Message = component$(({ message }: { message: MessageDto }) => {
     locale: ru,
   });
 
+  const like = $(async () => {
+    await fetch(`http://94.131.14.228:8081/messages/${message.id}/like`, {
+      method: "POST",
+      headers: new Headers({
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      }),
+    }).then();
+  });
+
   return (
     <div class="grid gap-2 border-b p-6 last:border-none">
       <div class="flex items-center space-x-2">
@@ -17,7 +27,10 @@ export const Message = component$(({ message }: { message: MessageDto }) => {
       </div>
       <div class="text-sm">{message.message}</div>
       <div class="mt-2 flex text-sm">
-        <button class="flex items-center space-x-2 rounded-full bg-violet-100 px-3 py-1.5 outline-0">
+        <button
+          class="flex items-center space-x-2 rounded-full bg-violet-100 px-3 py-1.5 outline-0"
+          onClick$={like}
+        >
           <LikeSvg class="text-rose-600" />
           <span class="font-medium text-violet-900">{message.likes}</span>
         </button>

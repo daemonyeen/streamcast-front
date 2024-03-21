@@ -23,6 +23,7 @@ export const Feed = component$(() => {
   const store = useStore<FeedState>({
     streamClient: undefined,
     messages: [],
+    castMessages: [],
   });
 
   useTask$(async () => {
@@ -59,6 +60,7 @@ export const Feed = component$(() => {
         return;
       }
 
+      store.castMessages = [...store.castMessages, newMessage];
       store.messages = [newMessage, ...store.messages];
     });
   });

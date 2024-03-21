@@ -6,6 +6,7 @@ import type { StreamClient } from "~/stream/stream-client";
 export type FeedState = {
   streamClient: NoSerialize<StreamClient>;
   messages: MessageDto[];
+  castMessages: MessageDto[];
 };
 
 export const FeedContext = createContextId<FeedState>("feed-context");

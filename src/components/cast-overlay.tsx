@@ -10,12 +10,19 @@ import type { MessageDto } from "~/stream/message";
 import LikeSvg from "~/icons/like.svg?jsx";
 
 export const CastOverlay = component$(() => {
-  const { messages } = useContext<FeedState>(FeedContext);
-  const lastMessage = useSignal<MessageDto | null>(messages[0] || null);
+  const { castMessages } = useContext<FeedState>(FeedContext);
+  const lastMessage = useSignal<MessageDto | null>(castMessages[0]);
 
   useVisibleTask$(() => {
     setInterval(() => {
-      const actualLastMessage = messages[0];
+      const index = castMessages.findIndex(
+        message => message.id === lastMessage.value?.id,
+      );
+
+      const actualLastMessage =
+        index + 1 < castMessages.length
+          ? castMessages[index + 1]
+          : lastMessage.value;
 
       if (actualLastMessage !== lastMessage.value) {
         lastMessage.value = actualLastMessage;
